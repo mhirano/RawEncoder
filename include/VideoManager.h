@@ -16,21 +16,21 @@ class VideoManager {
 public:
     VideoManager(int frameWidth_, int frameHeight_):frameWidth(frameWidth_), frameHeight(frameHeight_) {};
 
-    void loadVideoFromFile(const std::string videoFileName);
+    void loadVideoFromFile(const std::string videoFileName, int frameSkip=1);
 
-    bool encodeToAVI(std::string videoFileName, float aviFrameRate, int frameInterval) const;
+    bool encodeToAVI(float aviFrameRate, const std::string encodeFileName) const;
 
     int totalFrames() const;
     cv::Mat& imageAt(int index);
 
     static uint64_t sizeInByte(const std::string fileName);
+    static int computeAutoFrameSkip(const std::string videoFileName);
 
     bool isLoaded() const;
 
 private:
 
-    void loadVideoFromAviFile(const std::string aviFileName);
-    void loadVideoFromRawFile(const std::string rawFileName);
+    void loadVideoFromRawFile(const std::string rawFileName, int frameSKip);
 
     int frameWidth;
     int frameHeight;

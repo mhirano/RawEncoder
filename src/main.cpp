@@ -13,6 +13,7 @@ namespace fs = std::filesystem;
 #include "omp.h"
 #endif
 
+
 int main(int argc, char **argv) {
     char* rootDir = argv[1];
     std::string rootDirString(rootDir);
@@ -48,14 +49,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    // for(const fs::directory_entry& x : fs::recursive_directory_iterator(rootDirString)){
-    //     std::string extension = x.path().extension().string();
-    //     if(extension == ".raw"){
-    //         //parentPathFileArray.push_back(x.path().parent_path().string());
-    //         //rawFileArray.push_back(x.path().stem().string());
-    //     }
-    // }
-
     int numFile = rawFileArray.size();
 
 //#ifdef _OPENMP
@@ -74,9 +67,21 @@ int main(int argc, char **argv) {
             printf("Encoding %s.raw in thread num: %d\n",
                    rawFilePath.c_str(), omp_get_thread_num());
 
+            std::string rawFileFullPath = rawFilePath + ".raw";
+
+            int frameSkip = 10;
+            int autoFrameSkip = VideoManager::computeAutoFrameSkip(rawFileFullPath);
+
             VideoManager vm(frameWidth, frameHeight);
-            vm.loadVideoFromFile(rawFilePath + ".raw");
-            vm.encodeToAVI(rawFilePath + ".avi", 10.0, 25);
+            vm.loadVideoFromFile(rawFileFullPath,frameSkip);
+            std::cout << "auto: " << autoFrameSkip << std::endl;
+            if (frameSkip >= autoFrameSkip){
+                std::cout << "output: " << frameSkip << std::endl;
+                vm.encodeToAVI(10.0, rawFilePath + "_frameSkip_" + std::to_string(frameSkip) +".avi");
+            } else {
+                std::cout << "output: " << autoFrameSkip << std::endl;
+                vm.encodeToAVI(10.0, rawFilePath + "_frameSkip_" + std::to_string(autoFrameSkip) +".avi");
+            }
         }
         printf("\n");
 
