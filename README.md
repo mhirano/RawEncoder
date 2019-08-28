@@ -1,15 +1,25 @@
-This project contains a minimum set of files to work with OpenCV + CMake.
+## RawVideoEncoder
 
-- Primarily designed for CLion and Mac, but should work with other IDEs and operating system.
+### About
+Encode all `.raw` videos reside in the directory `/path_to_the_data_dir` to `.avi` videos.  
+Already encoded videos are automatically detected and skipped in the subsequent encoding.  
 
-- You should add paths before compile. For ease of use, here is excerpt from my .bash_profile
-```
-# OpenCV
-export OpenCV_DIR=/Users/mhirano/opencv-3.2.0/build
-export OpenCV_LIBS=/Users/mhirano/opencv-3.2.0/build/lib
-export OpenCV_INCLUDE_DIRS=/Users/mhirano/opencv-3.2.0/include
-```
-
-- Use out-of-source build. Namely, run cmake within debug/release directory as `cmake ..`
-
-- C++11 is activated by default if available.
+You can specify `frameSkip` - encode one image per `frameSkip` images.
+`frameSkip` automatically increases when video size is too large to load on the memory. 
+(Maximum memory allocation size is set to `_MAX_MEMORY_ALLOCATION_SIZE`.)
+ 
+ 
+ ### Requirement
+ - C++17 for std::filesystem  
+ Checked compilers: g++-9(Mac), g++-8(Ubuntu)
+ - OpenCV  
+ Checked version: 3.4.1, 4.1.1
+ - OpenMP (Optional)  
+ You can parallelize encoding by OpenMP.
+ 
+ ### Usage
+     ./RawEncoder /path_to_the_data_dir
+  
+### Contact
+Masahiro Hirano <masahiro.dll_at_gmail.com>
+    

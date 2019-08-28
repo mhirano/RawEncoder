@@ -10,7 +10,7 @@
 
 #include "Utility.h"
 
-#define _MAX_MEMORY_ALLOCATION 16000000000
+#define _MAX_MEMORY_ALLOCATION_SIZE 16000000000
 
 class RawVideoEncoder {
 
@@ -112,7 +112,7 @@ public:
 
     int computeFrameSkip(int frameSkip){
         uint64_t filesize = sizeInByte(videoFullPath);
-        int minFrameSkip = std::ceil((float) filesize / _MAX_MEMORY_ALLOCATION);
+        int minFrameSkip = std::ceil((float) filesize / _MAX_MEMORY_ALLOCATION_SIZE);
 
         if (frameSkip >= minFrameSkip){
             std::cout << "Set frameSkip to " << frameSkip << std::endl;

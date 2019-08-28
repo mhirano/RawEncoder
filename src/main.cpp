@@ -69,8 +69,11 @@ int main(int argc, char **argv) {
             printf("...encoded. Skip.");
         } else {
             printf("...not encoded.");
-            printf("Encoding %s.raw in thread num: %d\n",
-                   rawFilePath.c_str(), omp_get_thread_num());
+#ifdef _OPENMP
+            printf("Encoding %s.raw in thread num: %d\n", rawFilePath.c_str(), omp_get_thread_num());
+#else
+            printf("Encoding %s.raw\n", rawFilePath.c_str());
+#endif
 
             std::string rawFileFullPath = rawFilePath + ".raw";
 
