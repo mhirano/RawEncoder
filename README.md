@@ -4,7 +4,7 @@
 Encode all `.raw` videos reside in the directory `/path_to_the_data_dir` to `.avi` videos.  
 Already encoded videos are automatically detected and skipped in the subsequent encoding.  
 
-You can specify `frameSkip` - encode one image per `frameSkip` images.
+You can specify `frameSkip` − encode one image per `frameSkip` images.
 `frameSkip` automatically increases when video size is too large to load on the memory. 
 (Maximum memory allocation size is set to `_MAX_MEMORY_ALLOCATION_SIZE`.)
  
@@ -18,7 +18,11 @@ Checked version: 3.4.1, 4.1.1
 You can parallelize encoding by OpenMP.
  
 ### Usage
-    Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodedFrameRate (default=10)] [(Option:) frameSkip (default=10)]  
+You need to specify width and height of raw videos.  
+You can also specify `encodingFrameRate` − frame rate of output video (default = 10)
+and `frameSkip` (default = 10).  
+
+    Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodingFrameRate (default=10)] [(Option:) frameSkip (default=10)]  
     Example: ./RawEncoder /path_to_the_data_dir 800 600  
     Example: ./RawEncoder /path_to_the_data_dir 800 600 10  
     Example: ./RawEncoder /path_to_the_data_dir 800 600 15 15  

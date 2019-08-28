@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 void help(){
     printf("Invalid arguments. \n");
-    printf("\t Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodedFrameRate (default=10)] [(Option:) frameSkip (default=10)] \n");
+    printf("\t Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodingFrameRate (default=10)] [(Option:) frameSkip (default=10)] \n");
     printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 \n");
     printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 10 \n");
     printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 15 15\n");
