@@ -47,7 +47,7 @@ endif(OPENMP_FOUND)
 ######## ######## ######## ######## ######## ######## ######## ########
 # Compiler settings
 ######## ######## ######## ######## ######## ######## ######## ########
-# Check C++14 support and activate
+# Check C++17 support and activate
 
 if(UNIX AND NOT APPLE)
 	set(CMAKE_CXX_COMPILER "/usr/bin/g++-8")
