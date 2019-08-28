@@ -1,13 +1,11 @@
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include <filesystem> // checked on Ubuntu
 #include <algorithm>
 
-using namespace cv;
 using namespace std;
 namespace fs = std::filesystem;
 
-#include "VideoManager.h"
+#include "RawVideoEncoder.h"
 
 #ifdef _OPENMP
 #include "omp.h"
@@ -15,12 +13,8 @@ namespace fs = std::filesystem;
 
 
 int main(int argc, char **argv) {
-    char* rootDir = argv[1];
-    std::string rootDirString(rootDir);
-
     if (argc == 2){
         // OK. do nothing
-        std::cout << "Run RawEncode under " << rootDirString << "..." << std::endl;
     } else if (argc == 1){
         std::cerr << "Directory unspecified!" << std::endl
                   <<"Usage: ./RawEncoder /path_to_the_data_direcotry/" << std::endl;
@@ -29,6 +23,12 @@ int main(int argc, char **argv) {
         std::cerr << "Too many arguments" << std::endl;
         return -1;
     }
+
+    char* rootDir = argv[1];
+    std::string rootDirString(rootDir);
+
+    printf("Run RawEncode under %s ...", rootDirString.c_str());
+
     /**
      * videoFileDir に入っている動画を読み込む
      */
@@ -42,10 +42,8 @@ int main(int argc, char **argv) {
         std::string extension = x.path().extension().string();
         if (extension == ".raw"){
             rawFileArray.push_back(x.path().parent_path().string() + "/" + x.path().stem().string());
-            // std::cout << ".raw file: " << rawFileArray.back() << ".raw" << std::endl;
         } else if(extension == ".avi"){
             encodedFileArray.push_back(x.path().parent_path().string() + "/" + x.path().stem().string());
-            // std::cout << ".avi file: " << encodedFileArray.back() << ".avi" << std::endl;
         }
     }
 
@@ -55,37 +53,35 @@ int main(int argc, char **argv) {
 //#pragma omp parallel for // サーバからの読み込みが律速になっているので早くならないどころかランダムアクセス度が高まるので遅くなる
 //#endif
     for(int i = 0; i<numFile; i++){
-        //std::string fileStem = rawFileArray[i];
-        //std::string parentPath = parentPathFileArray[i];
         std::string rawFilePath = rawFileArray[i];
         printf("%s.raw", rawFilePath.c_str());
-        auto rawItr = find(encodedFileArray.cbegin(), encodedFileArray.cend(), rawFilePath);
-        if(rawItr != encodedFileArray.cend()){
-            printf("...skipped\n");
-        } else{
-            printf("...encode\n");
+
+        auto isEncoded = [](std::vector<std::string> const &stringArray, std::string const &query) -> bool {
+            auto contain = [](const std::string& s, const std::string& q) -> bool {
+                return s.find(q) != std::string::npos;
+            };
+            bool isEncoded = false;
+            for(const auto& itr : stringArray) isEncoded = isEncoded || contain(itr, query);
+            return isEncoded;
+        };
+
+        if(isEncoded(encodedFileArray, rawFilePath)){
+            printf("...encoded. Skip.");
+        } else {
+            printf("...not encoded.");
             printf("Encoding %s.raw in thread num: %d\n",
                    rawFilePath.c_str(), omp_get_thread_num());
 
             std::string rawFileFullPath = rawFilePath + ".raw";
 
             int frameSkip = 10;
-            int autoFrameSkip = VideoManager::computeAutoFrameSkip(rawFileFullPath);
 
-            VideoManager vm(frameWidth, frameHeight);
-            vm.loadVideoFromFile(rawFileFullPath,frameSkip);
-            std::cout << "auto: " << autoFrameSkip << std::endl;
-            if (frameSkip >= autoFrameSkip){
-                std::cout << "output: " << frameSkip << std::endl;
-                vm.encodeToAVI(10.0, rawFilePath + "_frameSkip_" + std::to_string(frameSkip) +".avi");
-            } else {
-                std::cout << "output: " << autoFrameSkip << std::endl;
-                vm.encodeToAVI(10.0, rawFilePath + "_frameSkip_" + std::to_string(autoFrameSkip) +".avi");
-            }
+            RawVideoEncoder vm(rawFileFullPath, frameWidth, frameHeight, frameSkip);
+            vm.loadVideoFromFile();
+            vm.encodeToAVI(10.0f);
         }
+
         printf("\n");
-
-
     }
 
     return 0;

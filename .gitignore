@@ -3,6 +3,7 @@
 
 # build directory
 /cmake-build-debug/*
+/cmake-build-release/*
 /build/*
 
 # debug directory

@@ -37,7 +37,7 @@ if (OPENMP_FOUND)
 		# set(autocalib_lib "${mylibs};fopenmp")
 	elseif(APPLE)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xpreprocessor -fopenmp")
-		set(autocalib_lib "${mylibs};omp;")
+		set(mylibs "${mylibs};omp;")
 	endif()
 	message(STATUS "OpenMP CXX flags: ${OpenMP_CXX_FLAGS}")
 endif(OPENMP_FOUND)
@@ -49,7 +49,12 @@ endif(OPENMP_FOUND)
 ######## ######## ######## ######## ######## ######## ######## ########
 # Check C++14 support and activate
 
-set(CMAKE_CXX_COMPILER "/usr/bin/g++-8")
+if(UNIX AND NOT APPLE)
+	set(CMAKE_CXX_COMPILER "/usr/bin/g++-8")
+elseif(APPLE)
+	set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-9")
+endif()
+
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++17" COMPILER_SUPPORTS_CXX17)
 if(COMPILER_SUPPORTS_CXX17)
@@ -72,8 +77,7 @@ message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
 set( src
 		${PROJECT_SOURCE_DIR}/src/main.cpp
-		${PROJECT_SOURCE_DIR}/include/VideoManager.h
-		${PROJECT_SOURCE_DIR}/src/VideoManager.cpp
+		${PROJECT_SOURCE_DIR}/include/RawVideoEncoder.h
 		${PROJECT_SOURCE_DIR}/include/Utility.h
 		)
 
