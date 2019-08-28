@@ -11,29 +11,40 @@ namespace fs = std::filesystem;
 #include "omp.h"
 #endif
 
+void help(){
+    printf("Invalid arguments. \n");
+    printf("\t Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodedFrameRate (default=10)] [(Option:) frameSkip (default=10)] \n");
+    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 \n");
+    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 10 \n");
+    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 15 15\n");
+}
 
 int main(int argc, char **argv) {
-    if (argc == 2){
-        // OK. do nothing
-    } else if (argc == 1){
-        std::cerr << "Directory unspecified!" << std::endl
-                  <<"Usage: ./RawEncoder /path_to_the_data_direcotry/" << std::endl;
-        return -1;
+    int frameSkip = 10;
+    int frameRate = 10;
+
+    if (argc == 6){
+        frameSkip = std::atoi(argv[5]);
+        frameRate = std::atoi(argv[4]);
+    } else if (argc == 5){
+        frameRate = std::atoi(argv[4]);
+    } else if (argc == 4){
+        // do nothing
     } else {
-        std::cerr << "Too many arguments" << std::endl;
+        help();
         return -1;
     }
 
-    char* rootDir = argv[1];
-    std::string rootDirString(rootDir);
+    std::string rootDirString(argv[1]);
+    int frameWidth = std::atoi(argv[2]);
+    int frameHeight = std::atoi(argv[3]);
 
-    printf("Run RawEncode under %s ...", rootDirString.c_str());
+    printf("Run RawEncode under %s ...\n", rootDirString.c_str());
+    printf("[Parameters] frame width: %d, frame height: %d, encoding frame rate: %d, frame skip: %d \n", frameWidth, frameHeight, frameRate, frameSkip);
 
     /**
      * videoFileDir に入っている動画を読み込む
      */
-    static int frameWidth = 800;
-    static int frameHeight = 600;
 
     std::vector<std::string> rawFileArray;
     std::vector<std::string> encodedFileArray;
@@ -77,11 +88,9 @@ int main(int argc, char **argv) {
 
             std::string rawFileFullPath = rawFilePath + ".raw";
 
-            int frameSkip = 10;
-
             RawVideoEncoder vm(rawFileFullPath, frameWidth, frameHeight, frameSkip);
             vm.loadVideoFromFile();
-            vm.encodeToAVI(10.0f);
+            vm.encodeToAVI(30.0f);
         }
 
         printf("\n");
