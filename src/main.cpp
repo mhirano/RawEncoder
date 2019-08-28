@@ -13,19 +13,30 @@ namespace fs = std::filesystem;
 #endif
 
 int main(int argc, char **argv) {
+    char* rootDir = argv[1];
+    std::string rootDirString(rootDir);
 
+    if (argc == 2){
+        // OK. do nothing
+        std::cout << "Run RawEncode under " << rootDirString << "..." << std::endl;
+    } else if (argc == 1){
+        std::cerr << "Directory unspecified!" << std::endl
+                  <<"Usage: ./RawEncoder /path_to_the_data_direcotry/" << std::endl;
+        return -1;
+    } else {
+        std::cerr << "Too many arguments" << std::endl;
+        return -1;
+    }
     /**
      * videoFileDir に入っている動画を読み込む
      */
-
     static int frameWidth = 800;
     static int frameHeight = 600;
 
     std::vector<std::string> rawFileArray;
     std::vector<std::string> parentPathFileArray;
 
-    for(const fs::directory_entry& x : fs::recursive_directory_iterator(
-            "/run/user/1000/gvfs/afp-volume:host=fortyeight.local,user=anonymous,volume=Project/Kotei/HSV_DATA/TruckData_20190822/20190808/")){
+    for(const fs::directory_entry& x : fs::recursive_directory_iterator(rootDirString)){
         std::string extension = x.path().extension().string();
         if(extension == ".raw"){
             parentPathFileArray.push_back(x.path().parent_path().string());
@@ -35,9 +46,9 @@ int main(int argc, char **argv) {
 
     int numFile = rawFileArray.size();
 
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
+//#ifdef _OPENMP
+//#pragma omp parallel for // サーバからの読み込みが律速になっているので早くならないどころかランダムアクセス度が高まるので遅くなる
+//#endif
     for(int i = 0; i<numFile; i++){
         std::string fileStem = rawFileArray[i];
         std::string parentPath = parentPathFileArray[i];

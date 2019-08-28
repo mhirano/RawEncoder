@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project( SAMPLE CXX )
+project( RawEncoder CXX )
 
 #### Environment
 if (UNIX AND NOT APPLE) #Ubuntu...
@@ -77,6 +77,6 @@ set( src
 		${PROJECT_SOURCE_DIR}/include/Utility.h
 		)
 
-add_executable( SAMPLE ${src} )
-target_link_libraries( SAMPLE ${OpenCV_LIBS} ${mylibs} -lstdc++fs)
+add_executable( ${PROJECT_NAME}  ${src} )
+target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} ${mylibs} -lstdc++fs)
 
