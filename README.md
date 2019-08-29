@@ -8,6 +8,7 @@ You can specify `frameSkip` − encode one image per `frameSkip` images.
 `frameSkip` automatically increases when video size is too large to load on the memory. 
 (Maximum memory allocation size is set to `_MAX_MEMORY_ALLOCATION_SIZE`.)
  
+Also provides a utility class for `.raw` videos.
  
 ### Requirement
 - C++17 for std::filesystem  

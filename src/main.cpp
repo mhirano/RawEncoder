@@ -5,7 +5,7 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-#include "RawVideoEncoder.h"
+#include "RawVideo.h"
 
 #ifdef _OPENMP
 #include "omp.h"
@@ -88,9 +88,9 @@ int main(int argc, char **argv) {
 
             std::string rawFileFullPath = rawFilePath + ".raw";
 
-            RawVideoEncoder vm(rawFileFullPath, frameWidth, frameHeight, frameSkip);
+            RawVideo vm(rawFileFullPath, frameWidth, frameHeight, 0.0, 1.0, frameSkip);
             vm.loadVideoFromFile();
-            vm.encodeToAVI(30.0f);
+            vm.encodeToAVI(frameRate);
         }
 
         printf("\n");

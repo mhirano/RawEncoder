@@ -77,7 +77,7 @@ message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
 set( src
 		${PROJECT_SOURCE_DIR}/src/main.cpp
-		${PROJECT_SOURCE_DIR}/include/RawVideoEncoder.h
+        ${PROJECT_SOURCE_DIR}/include/RawVideo.h
 		${PROJECT_SOURCE_DIR}/include/Utility.h
 		)
 
