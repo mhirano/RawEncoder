@@ -1,0 +1,3 @@
+[submodule "3rdparty/cvut"]
+	path = 3rdparty/cvut
+	url = git@github.com:mhirano/cvut.git
