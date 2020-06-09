@@ -5,7 +5,8 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-#include "RawVideo.h"
+#include <cvut/RawVideo.h>
+using namespace cvut;
 
 #ifdef _OPENMP
 #include "omp.h"
@@ -20,6 +21,7 @@ void help(){
 }
 
 int main(int argc, char **argv) {
+
     int frameSkip = 10;
     int frameRate = 10;
 
@@ -77,9 +79,9 @@ int main(int argc, char **argv) {
         };
 
         if(isEncoded(encodedFileArray, rawFilePath)){
-            printf("...encoded. Skip.");
+            printf("...encoded. Skip.\n");
         } else {
-            printf("...not encoded.");
+            printf("...not encoded.\n");
 #ifdef _OPENMP
             printf("Encoding %s.raw in thread num: %d\n", rawFilePath.c_str(), omp_get_thread_num());
 #else
@@ -90,7 +92,8 @@ int main(int argc, char **argv) {
 
             RawVideo vm(rawFileFullPath, frameWidth, frameHeight, 0.0, 1.0, frameSkip);
             vm.loadVideoFromFile();
-            vm.encodeToAVI(frameRate);
+//            vm.encodeToAVI(frameRate);
+            vm.encodeToMP4(frameRate);
         }
 
         printf("\n");
