@@ -105,11 +105,17 @@ message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 ######## ######## ######## ######## ######## ######## ######## ########
 
-set( src
-		${PROJECT_SOURCE_DIR}/src/main.cpp
+# MP4 encoder
+set( mp4encoder_mono_src
+		${PROJECT_SOURCE_DIR}/src/mp4encoder_mono.cpp
 		)
-
-add_executable( ${PROJECT_NAME}  ${src} )
-target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} ${mylibs})
+add_executable( mp4encoder_mono  ${mp4encoder_mono_src} )
+target_link_libraries( mp4encoder_mono ${OpenCV_LIBS} ${mylibs})
 #target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} ${mylibs} -lstdc++fs)
 
+# MP4 encoder stereo
+set( mp4encoder_stereo_src
+		${PROJECT_SOURCE_DIR}/src/mp4encoder_stereo.cpp
+		)
+add_executable( mp4encoder_stereo  ${mp4encoder_stereo_src} )
+target_link_libraries( mp4encoder_stereo ${OpenCV_LIBS} ${mylibs})

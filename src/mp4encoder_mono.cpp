@@ -14,10 +14,10 @@ using namespace cvut;
 
 void help(){
     printf("Invalid arguments. \n");
-    printf("\t Usage: ./RawEncoder [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodingFrameRate (default=10)] [(Option:) frameSkip (default=10)] \n");
-    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 \n");
-    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 10 \n");
-    printf("\t Example: ./RawEncoder /path_to_the_data_dir 800 600 15 15\n");
+    printf("\t Usage: ./mp4encoder_mono [/path_to_the_data_dir] [frameWidth] [frameHeight] [(Option:) encodingFrameRate (default=10)] [(Option:) frameSkip (default=10)] \n");
+    printf("\t Example: ./mp4encoder_mono /path_to_the_data_dir 800 600 \n");
+    printf("\t Example: ./mp4encoder_mono /path_to_the_data_dir 800 600 10 \n");
+    printf("\t Example: ./mp4encoder_mono /path_to_the_data_dir 800 600 15 15\n");
 }
 
 int main(int argc, char **argv) {
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     int frameWidth = std::atoi(argv[2]);
     int frameHeight = std::atoi(argv[3]);
 
-    printf("Run RawEncode under %s ...\n", rootDirString.c_str());
+    printf("Run mp4encoder_mono under %s ...\n", rootDirString.c_str());
     printf("[Parameters] frame width: %d, frame height: %d, encoding frame rate: %d, frame skip: %d \n", frameWidth, frameHeight, frameRate, frameSkip);
 
     /**
@@ -92,7 +92,6 @@ int main(int argc, char **argv) {
 
             RawVideo vm(rawFileFullPath, frameWidth, frameHeight, 0.0, 1.0, frameSkip);
             vm.loadVideoFromFile();
-//            vm.encodeToAVI(frameRate);
             vm.encodeToMP4(frameRate);
         }
 
