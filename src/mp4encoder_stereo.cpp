@@ -77,9 +77,20 @@ int main(int argc, char **argv) {
         cv::hconcat(leftVideo.imageAt(i), rightVideo.imageAt(i), canvas);
 
         cv::cvtColor(canvas, canvas_color, cv::COLOR_GRAY2BGR);
+        std::string time = "Time: " + std::to_string((float)i*frameSkip/500.0);
 
-        cv::putText(canvas_color, "Time: " + std::to_string((float)i*frameSkip/500.0), cv::Point(50,50),
-                    cv::FONT_HERSHEY_SIMPLEX, 1, {0, 0, 0});
+        double fontScale = 0.8;
+
+        int baseLine;
+        cv::Size labelSize = cv::getTextSize(time, cv::FONT_HERSHEY_SIMPLEX, fontScale, 1, &baseLine);
+
+        int top = 50, left = 50;
+        rectangle(canvas_color,
+                  cv::Point(left, top - round(1.5 * labelSize.height)),
+                  cv::Point(left + round(1.5 * labelSize.width), top + baseLine),
+                  cv::Scalar(255, 255, 255), cv::FILLED);
+        cv::putText(canvas_color, time, cv::Point(left, top),
+                    cv::FONT_HERSHEY_SIMPLEX, fontScale*1.5, {0, 0, 0}, 1);
 
         writer.write(canvas_color);
 
